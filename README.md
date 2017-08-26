@@ -1,5 +1,4 @@
 # PostgreSQL Full-Text Search - Polish Dictionary
----
 
 1. Go to [sjp.pl](https://sjp.pl/slownik/ort/) and download `sjp-ispell-pl-[date]-src.tar.bz2` file.
 2. Unpack the file and `cd` to the directory.
