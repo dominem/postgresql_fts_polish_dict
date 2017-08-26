@@ -3,34 +3,19 @@
 1. Go to [sjp.pl](https://sjp.pl/slownik/ort/) and download `sjp-ispell-pl-[date]-src.tar.bz2` file.
 2. Unpack the file and `cd` to the directory.
 3. Download Polish stopwords from [GitHub repo](https://github.com/DominikMagdalenski/stopwords/blob/master/polish.stopwords.txt) and save it in the current directory.
-4. `$ sudo apt install ispell`
-5. Amend `build` file so it looks like that (make sure it won't remove `polish.dic`):
-    ```bash
-    #!/bin/bash
-
-    if [ ! $* ]; then
-        echo "Nie podano nazw plików ze słowami"
-        exit
-    fi
-
-    cat $* > polish.dic
-
-    buildhash polish.dic polish.aff polish.hash \
-     && rm -f polish.dic.cnt polish.dic.stat
-    ```
-6. Execute build `$ ./build polish.all polish.minus`.
-7. Convert encodings to utf-8 and give proper extensions to files:
+4. Convert encodings to utf-8 and give proper extensions to files:
     ```bash
     $ iconv -f ISO_8859-2 -t utf-8 polish.aff > polish.affix
-    $ iconv -f ISO_8859-2 -t utf-8 polish.dic > polish.dict
+    $ iconv -f ISO_8859-2 -t utf-8 polish.all > polish.dict
+    $ mv polish.stopwords.txt polish.stop
     ```
-8. Copy files to `pg_config --sharedir` directory:
+5. Copy files to `pg_config --sharedir` directory:
     ```bash
     sudo cp polish.affix `pg_config --sharedir`/tsearch_data/
     sudo cp polish.dict `pg_config --sharedir`/tsearch_data/
-    sudo cp polish.stopwords.txt `pg_config --sharedir`/tsearch_data/polish.stop
+    sudo cp polish.stop `pg_config --sharedir`/tsearch_data/
     ```
-9. Now, in postgres:
+6. Now, in postgres:
     ```postgres
     CREATE TEXT SEARCH DICTIONARY pl_ispell (
       Template = ispell,
@@ -45,7 +30,7 @@
       ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, word, hword, hword_part
       WITH pl_ispell;
     ```
-10. Test, in postgres:
+7. Test, in postgres:
     ```postgres
     SELECT to_tsvector('pl_ispell', 'Czuję się mniej więcej tak, jak ktoś, kto bujał w obłokach i nagle spadł.');
 
