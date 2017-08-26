@@ -11,9 +11,9 @@
     ```
 5. Copy files to `pg_config --sharedir` directory:
     ```bash
-    sudo cp polish.affix `pg_config --sharedir`/tsearch_data/
-    sudo cp polish.dict `pg_config --sharedir`/tsearch_data/
-    sudo cp polish.stop `pg_config --sharedir`/tsearch_data/
+    $ sudo cp polish.affix `pg_config --sharedir`/tsearch_data/
+    $ sudo cp polish.dict `pg_config --sharedir`/tsearch_data/
+    $ sudo cp polish.stop `pg_config --sharedir`/tsearch_data/
     ```
 6. Now, in postgres:
     ```postgres
